@@ -18,7 +18,8 @@ public class Enemy
 	
 	public void tick()
 	{
-		this.x += (Game.ball.x - x  -6);
+		//Multiplicamos por 0.4 para evitar que o Inimigo sempre acerte
+		this.x += (Game.ball.x - x  -6) * 0.1;
 	}
 	
 	public void render(Graphics graphics)

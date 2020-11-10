@@ -11,7 +11,7 @@ public class Ball
 	public int width, height;
 	
 	public double dx, dy;
-	public double speed = 1.6;
+	public double speed = 2.2;
 	
 	public Ball(int x, int y)
 	{
@@ -19,8 +19,8 @@ public class Ball
 		this.y = y;
 		this.width = 4;
 		this.height = 4;
-		dx = new Random().nextGaussian();
-		dy = new Random().nextGaussian();
+		
+		RandomAngle();
 	}
 	
 	public void tick()
@@ -39,10 +39,18 @@ public class Ball
 		if(y >= Game.HEIGHT)
 		{
 			//Ponto do Inimigo
+			System.out.println("Ponto do Inimigo!");
+			//Coneça uma nova partida
+			new Game();
+			return;
 		}
 		else if(y < 0)
 		{
 			//Ponto do Jogador
+			System.out.println("Ponto nosso!!!");
+			//Coneça uma nova partida
+			new Game();
+			return;
 		}
 
 		//Criando colisor para Ball
@@ -52,9 +60,21 @@ public class Ball
 		Rectangle boundsEnemy = new Rectangle((int)Game.enemy.x, (int)Game.enemy.y, Game.enemy.width, Game.enemy.height);
 		
 		//Detectando colisões entre entidades
-		if(bounds.intersects(boundsPlayer) || bounds.intersects(boundsEnemy))
+		if(bounds.intersects(boundsPlayer))
 		{
-			dy*= -1;
+			//Muda de angulo ao colidir com algo
+			RandomAngle();
+			//Muda a diração da bola
+			if(dy > 0)
+				dy*= -1;
+		}
+		else if(bounds.intersects(boundsEnemy))
+		{
+			//Muda de angulo ao colidir com algo
+			RandomAngle();
+			//Muda a diração da bola
+			if(dy < 0)
+				dy*= -1;
 		}
 		
 		x += dx * speed;
@@ -65,5 +85,15 @@ public class Ball
 	{
 		graphics.setColor(Color.yellow);
 		graphics.fillRect((int)x, (int)y, width, height);
+	}
+	
+	public void RandomAngle()
+	{
+		//O angulo será algo entre 45 e 75 graus que a bola vai ter
+		int angle = new Random().nextInt(120-45)+45;
+				
+		//Gera um angulo aleatorio para Ball
+		dx = Math.cos(Math.toRadians(angle));
+		dy = Math.sin(Math.toRadians(angle));
 	}
 }
